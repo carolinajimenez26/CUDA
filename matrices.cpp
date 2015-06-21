@@ -35,7 +35,7 @@ void inicializaMatriz(int** X,int filas, int columnas){//la llena de ceros
 
 void multiplicaMatrices(int** X,int filX,int colX,int** Y,int filY,int colY,int** Z){
 	int suma=0;
-	assert(colX==filY);//las columnas de la primera matriz deben ser iguales a las filas de la segunda matriz
+	//assert(colX==filY);//las columnas de la primera matriz deben ser iguales a las filas de la segunda matriz
 	//Z=inicializaMatriz(Z,filX,colY);
 	for(int i=0;i<filX;i++){//la multiplicación se realiza entre las filas de la primera matriz
 		for(int j=0;j<colY;j++){//y las columnas de la segunda matriz
@@ -53,7 +53,7 @@ int main(void){
 	
 	int** A;int** B;int** C;//Matrices
 	//A[filA][colA], B[filB][colB], C[filA][colB]
-	int filA=4,filB=4,colA=4,colB=4;
+	int filA=4,filB=4,colA=3,colB=4;
 	
 	A=(int**)malloc(filA*sizeof(int*));//reservamos memoria
 
@@ -78,11 +78,17 @@ int main(void){
 	llenaMatrices(B,filB,colB);
 	cout<<"Matriz B:"<<endl;
 	imprimeMatrices(B,filB,colB);
-
-	multiplicaMatrices(A,filA,colA,B,filB,colB,C);
-	cout<<"Multiplicación:"<<endl;
-	imprimeMatrices(C,filA,colB);
-
+	
+	if(colA!=filB){
+		cout<<"No se pueden multiplicar"<<endl;
+		return 0;
+	}
+	else{
+		multiplicaMatrices(A,filA,colA,B,filB,colB,C);
+		cout<<"Multiplicación:"<<endl;
+		imprimeMatrices(C,filA,colB);
+	}	
+	
 	free(*A);free(*B);free(*C);//liberamos memoria
 	free(A);free(B);free(C);
 
