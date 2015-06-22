@@ -53,7 +53,7 @@ int main(void){
 	
 	int** A;int** B;int** C;//Matrices
 	//A[filA][colA], B[filB][colB], C[filA][colB]
-	int filA=4,filB=4,colA=3,colB=4;
+	int filA=10000,filB=10000,colA=10000,colB=10000;
 	
 	A=(int**)malloc(filA*sizeof(int*));//reservamos memoria
 
