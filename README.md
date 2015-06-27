@@ -1,2 +1,2 @@
-# Matrices_multiplicacion
-Multiplicacion de matrices, C++
+# NVIDIA JETSON TK1
+Getting started with JTK1
