@@ -30,8 +30,12 @@ void imprimeVec(int* X){
 
 
 int main(void){
-	clock_t start = clock();  
+	clock_t start, end;
 	int* A;int* B;int* C;//vectores a los cuales se le van a realizar las operaciones
+
+	//iniciamos la cuenta del reloj
+	start = clock();
+
 	A=(int*)malloc(SIZE*sizeof(int)); 
 	B=(int*)malloc(SIZE*sizeof(int));
 	C=(int*)malloc(SIZE*sizeof(int));
@@ -40,9 +44,11 @@ int main(void){
 	inicializaVec(B);
 
 	SumaVec(A,B,C);
+	//terminamos la cuenta del reloj
+	end = clock();
+
+	imprimeVec(C);
 	
-	//imprimeVec(C);
-	
-	cout<<endl<<"Tiempo transcurrido: "<<((double)clock() - start) / CLOCKS_PER_SEC<<endl;
+	cout<<"El tiempo transcurrido fue: "<<((double)(end-start))/CLOCKS_PER_SEC<<endl;
 	return 0;
 }
