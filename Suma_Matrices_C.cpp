@@ -1,6 +1,7 @@
 //PROGRAMA QUE SUMA DOS MATRICES EN C++
 #include<iostream>
 #include<malloc.h>
+#include<time.h>
 using namespace std; 
 
 
@@ -32,7 +33,12 @@ void inicializaMatriz(int** X,int filas, int columnas){//la llena de ceros
 }
 
 int main(void){
+	clock_t start, end;
 	int **A,**B,**C,x=2000,y=1500;
+
+	//iniciamos la cuenta del reloj
+	start = clock();
+
 	A=(int**)malloc(x*sizeof(int*));//reservamos memoria
 	for(int i=0;i<x;i++){
 		A[i]=(int*)malloc(y*sizeof(int*));
@@ -49,7 +55,14 @@ int main(void){
 	inicializaMatriz(A,x,y);
 	inicializaMatriz(B,x,y);
 	SumaMatrices(A,B,C,x,y);
+
+	//terminamos la cuenta del reloj
+	end = clock();
+
 	imprimeMatriz(C,x,y);
+
+	cout<<"El tiempo transcurrido fue: "<<((double)(end-start))/CLOCKS_PER_SEC<<endl;
+
 	return 0;
 
 }
