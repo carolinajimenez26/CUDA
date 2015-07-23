@@ -32,14 +32,18 @@ __global__ void SumaVecCU(int *A,int *B, int*C){
 
 
 int main(void){
-	//clock_t start = clock();  
+	clock_t start,end;  
 	int *A, *B, *C, *d_A, *d_B, *d_C; //vectores a los cuales se le van a realizar las operaciones
+
 	A=(int*)malloc(SIZE*sizeof(int)); 
 	B=(int*)malloc(SIZE*sizeof(int));
 	C=(int*)malloc(SIZE*sizeof(int));
 
 	inicializaVec(B);
 	inicializaVec(A);
+
+	//iniciamos la cuenta del reloj
+	start = clock();
 
 	cudaMalloc(&d_A,SIZE*sizeof(int));
 	cudaMalloc(&d_B,SIZE*sizeof(int));
@@ -58,10 +62,13 @@ int main(void){
 	//SumaVecCU<<<1,SIZE>>>(d_A,d_B,d_C,SIZE);
 	cudaDeviceSynchronize();//espera que termine la funcion anterior 
 	cudaMemcpy(C,d_C,SIZE*sizeof(int),cudaMemcpyDeviceToHost);//copia la operacion relizada en el device al host en el vector C
-
-	//imprimeVec(C);
 	
-	//cout<<endl<<"Tiempo transcurrido: "<<((double)clock() - start) / CLOCKS_PER_SEC<<endl;
+	//terminamos la cuenta del reloj
+	end = clock();
+
+	imprimeVec(C);
+	
+	cout<<"El tiempo transcurrido fue: "<<((double)(end-start))/CLOCKS_PER_SEC<<endl;
 	
 	free(A);free(B);free(C);
 	cudaFree(d_A);
