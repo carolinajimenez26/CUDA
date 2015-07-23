@@ -50,11 +50,14 @@ void multiplicaMatrices(int** X,int filX,int colX,int** Y,int filY,int colY,int*
 }
 
 int main(void){
-	
+	clock_t start, end;
 	int** A;int** B;int** C;//Matrices
 	//A[filA][colA], B[filB][colB], C[filA][colB]
 	int filA=10000,filB=10000,colA=10000,colB=10000;
 	
+	//iniciamos la cuenta del reloj
+	start = clock();
+
 	A=(int**)malloc(filA*sizeof(int*));//reservamos memoria
 
 	for(int i=0;i<filA;i++){
@@ -87,8 +90,12 @@ int main(void){
 		multiplicaMatrices(A,filA,colA,B,filB,colB,C);
 		cout<<"Multiplicación:"<<endl;
 		imprimeMatrices(C,filA,colB);
-	}	
+	}
 	
+	//terminamos la cuenta del reloj
+	end = clock();
+	cout<<"El tiempo transcurrido fue: "<<((double)(end-start))/CLOCKS_PER_SEC<<endl;
+
 	free(*A);free(*B);free(*C);//liberamos memoria
 	free(A);free(B);free(C);
 
