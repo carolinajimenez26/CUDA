@@ -2,6 +2,7 @@
 #include<iostream>
 #include<stdio.h>
 #include<malloc.h>
+#include<time.h>
 #include<cuda.h>
 using namespace std; 
 
