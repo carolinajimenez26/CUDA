@@ -6,15 +6,14 @@ using namespace std;
 
 
 void multiplicaMatrices(int* X,int filX,int colX,int* Y,int filY,int colY,int* Z){
-	int suma=0;
 	for(int i=0;i<filX;i++){
 		for(int j=0;j<colY;j++){
-			suma=0;
+			int suma=0;
 			for(int k=0;k<filY;k++){
-				suma=suma+X[(i*colX)+k]*Y[(k*colY)+j];
-				cout<<"i:"<<i<<" j:"<<j<<" suma:"<<suma<<" k:"<<k<<" X["<<(i*colX)+k<<"],Y["<<(k*colY)+j<<"]"<<endl;
+				suma=suma+X[(i*colX)+k]*Y[(k*filY)+j];
+				//cout<<"i:"<<i<<" j:"<<j<<" suma:"<<suma<<" k:"<<k<<" X["<<(i*colX)+k<<"],Y["<<(k*colY)+j<<"]"<<endl;
 			}
-			Z[(i*colY)+j]=suma;cout<<"Z["<<(i*colY)+j<<"]"<<endl;
+			Z[(i*colY)+j]=suma;
 		}	
 	}
 }
@@ -38,20 +37,20 @@ int main(void){
 
 	clock_t startCPU,endCPU;  
 	int *A,*B,*C; //A[filA][colA],B[filB][colB],C[filA][colB]
-	int filA=3,colA=3,filB=3,colB=3;
+	int filA=2,colA=2,filB=2,colB=4;
 
 	startCPU = clock();	
 
 	A=(int*)malloc(filA*colA*sizeof(int)); 
 	B=(int*)malloc(filB*colB*sizeof(int));
-	C=(int*)malloc(colA*filB*sizeof(int));
+	C=(int*)malloc(filA*colB*sizeof(int));
 
 	inicializa(A,filA,colA);
 	inicializa(B,filB,colB);
 	
 	if(colA==filB){//para que sean multiplicables
 		multiplicaMatrices(A,filA,colA,B,filB,colB,C);
-		//imprime(C,filA,colB);
+		imprime(C,filA,colB);
 	}else{
 		cout<<"Error, no se pueden multiplicar"<<endl;
 	}
@@ -59,7 +58,7 @@ int main(void){
 	endCPU = clock();
 
 	double time_CPU=((double)(endCPU-startCPU))/CLOCKS_PER_SEC;
-	//cout<<"El tiempo transcurrido en la GPU fue: "<<time_CPU<<endl;
+	cout<<"El tiempo transcurrido en la GPU fue: "<<time_CPU<<endl;
 	
 	free(A);free(B);free(C);
 	return 0;
