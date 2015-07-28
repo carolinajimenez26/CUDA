@@ -98,7 +98,8 @@ int main(void){
 	imprime(h_C,filA,colB);
 	double time_GPU=((double)(endGPU-startGPU))/CLOCKS_PER_SEC;
 	cout<<"El tiempo transcurrido en la GPU fue: "<<time_GPU<<endl;
-
+	//-----------------------------------------------------------------------------------
+	cout<<"El tiempo de aceleramiento fue: "<<time_CPU/time_GPU<<endl;
 	free(A);free(B);free(C);free(h_C);
 	cudaFree(d_A);
 	cudaFree(d_B);
