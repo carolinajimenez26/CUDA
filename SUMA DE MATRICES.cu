@@ -2,7 +2,7 @@
 #include<iostream>
 #include<stdio.h>
 #include<malloc.h>
-//#include<cuda.h>
+#include<cuda.h>
 using namespace std; 
 
 __global__ void SumaCU(int* A,int* B,int* C,int m,int n){//matriz[m][n]
@@ -59,7 +59,7 @@ int main(void){
 
 	imprime(C,filas,columnas);
 	double time_CPU=((double)(endCPU-startCPU))/CLOCKS_PER_SEC;
-	cout<<"El tiempo transcurrido en la GPU fue: "<<time_CPU<<endl;
+	cout<<"El tiempo transcurrido en la CPU fue: "<<time_CPU<<endl;
 	//-------------------------------GPU--------------------------------------------------------------------	
 	h_C=(int*)malloc(SIZE);
 	
