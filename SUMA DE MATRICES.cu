@@ -8,9 +8,8 @@ using namespace std;
 __global__ void SumaCU(int* A,int* B,int* C,int m,int n){//matriz[m][n]
 	int row = blockIdx.y*blockDim.y + threadIdx.y;
 	int col = blockIdx.x*blockDim.x + threadIdx.x;
-	int i=row*n+col;
 	if((row<m)&&(col<n)){
-		C[i]=A[i]+B[i];
+		C[row*n+col]=A[row*n+col]+B[row*n+col];
 	}	
 }
 
@@ -41,7 +40,7 @@ int main(void){
 
 	clock_t startCPU,endCPU,startGPU,endGPU;  
 	int *A,*B,*C,*h_C,*d_A,*d_B,*d_C;
-	int filas=10,columnas=10,SIZE=filas*columnas*sizeof(int);
+	int filas=2048,columnas=2048,SIZE=filas*columnas*sizeof(int);
 
 	//-------------------------------CPU--------------------------------------------------------------------
 	startCPU = clock();	
@@ -57,7 +56,7 @@ int main(void){
 	
 	endCPU = clock();
 
-	imprime(C,filas,columnas);
+	//imprime(C,filas,columnas);
 	double time_CPU=((double)(endCPU-startCPU))/CLOCKS_PER_SEC;
 	cout<<"El tiempo transcurrido en la CPU fue: "<<time_CPU<<endl;
 	//-------------------------------GPU--------------------------------------------------------------------	
@@ -65,15 +64,15 @@ int main(void){
 	
 	startGPU = clock();
 
-	cudaMalloc(&d_A,SIZE);
-	cudaMalloc(&d_B,SIZE);
-	cudaMalloc(&d_C,SIZE);
+	cudaMalloc((void**)&d_A,SIZE);
+	cudaMalloc((void**)&d_B,SIZE);
+	cudaMalloc((void**)&d_C,SIZE);
 
-	cudaMemcpy(&d_A,A,SIZE,cudaMemcpyHostToDevice);
-	cudaMemcpy(&d_B,B,SIZE,cudaMemcpyHostToDevice);
+	cudaMemcpy(d_A,A,SIZE,cudaMemcpyHostToDevice);
+	cudaMemcpy(d_B,B,SIZE,cudaMemcpyHostToDevice);
 
-	dim3 dimblock(10,10,1);//ya que es una matriz 10x10
-	dim3 dimGrid(1,1,1);
+	dim3 dimblock(32,32,1);//ya que es una matriz 10x10
+	dim3 dimGrid(ceil(filas/32),ceil(columnas/32),1);
 	
 	SumaCU<<<dimGrid,dimblock>>>(d_A,d_B,d_C,filas,columnas);
 	cudaDeviceSynchronize();//espera que termine la funcion anterior 
@@ -81,7 +80,7 @@ int main(void){
 	
 	endGPU = clock();
 	
-	imprimeVec(h_C);
+	imprime(h_C,filas,columnas);
 	double time_GPU=((double)(endGPU-startGPU))/CLOCKS_PER_SEC;
 	cout<<"El tiempo transcurrido en la GPU fue: "<<time_GPU<<endl;
 	//------------------------------------------------------------------------------------------------------	
