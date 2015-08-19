@@ -6,7 +6,7 @@
 
 using namespace std;
 
-#define SIZE 1024;//tamaño de los vectores
+#define SIZE 1024 //tamaño de los vectores
 
 
 __host__ void inicializaVec(int* X){
@@ -59,9 +59,9 @@ int main(void){
 	//terminamos la cuenta del reloj
 	endCPU = clock();
 	
-	imprimeVec(C);
+	//imprimeVec(C);
 	double time_CPU=((double)(endCPU-startCPU))/CLOCKS_PER_SEC;
-	cout<<"El tiempo transcurrido en la CPU fue: "<<time_CPU<<endl;
+	cout<<endl<<"El tiempo transcurrido en la CPU fue: "<<time_CPU<<endl;
 	//-------------------------------GPU--------------------------------------------------------------------
 	h_C=(int*)malloc(SIZE*sizeof(int));
 	
@@ -69,12 +69,12 @@ int main(void){
 	startGPU = clock();
 
 	//Reservamos memoria para el device
-	cudaMalloc(&d_A,SIZE*sizeof(int));
-	cudaMalloc(&d_B,SIZE*sizeof(int));
-	cudaMalloc(&d_C,SIZE*sizeof(int));
+	cudaMalloc((void**)&d_A,SIZE*sizeof(int));
+	cudaMalloc((void**)&d_B,SIZE*sizeof(int));
+	cudaMalloc((void**)&d_C,SIZE*sizeof(int));
 
-	cudaMemcpy(&d_A,A,SIZE*sizeof(int),cudaMemcpyHostToDevice);//destino d_A y origen A
-	cudaMemcpy(&d_B,B,SIZE*sizeof(int),cudaMemcpyHostToDevice);
+	cudaMemcpy(d_A,A,SIZE*sizeof(int),cudaMemcpyHostToDevice);//destino d_A y origen A
+	cudaMemcpy(d_B,B,SIZE*sizeof(int),cudaMemcpyHostToDevice);
 	
 	dim3 dimblock(SIZE,1,1);//vamos a utilicar un bloque con size threads
 	dim3 dimGrid(1,1,1);
@@ -88,13 +88,13 @@ int main(void){
 	
 	imprimeVec(h_C);
 	double time_GPU=((double)(endGPU-startGPU))/CLOCKS_PER_SEC;
-	cout<<"El tiempo transcurrido en la GPU fue: "<<time_GPU<<endl;
+	cout<<endl<<"El tiempo transcurrido en la GPU fue: "<<time_GPU<<endl;
 	//------------------------------------------------------------------------------------------------------	
 	free(A);free(B);free(C);free(h_C);
 	cudaFree(d_A);
 	cudaFree(d_B);
 	cudaFree(d_C);
 
-	cout<<"El tiempo de aceleramiento fue: "<<time_CPU/time_GPU<<endl;
+	cout<<endl<<"El tiempo de aceleramiento fue: "<<time_CPU/time_GPU<<endl;
 	return 0;
 }
