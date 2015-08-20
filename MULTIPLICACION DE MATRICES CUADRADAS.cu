@@ -24,6 +24,7 @@ __host__ void multiplicaMatrices(int* X,int filX,int colX,int* Y,int filY,int co
 			int suma=0;
 			for(int k=0;k<filY;k++){
 				suma=suma+X[(i*colX)+k]*Y[(k*filY)+j];
+
 			}
 			Z[(i*colY)+j]=suma;
 		}	
@@ -51,7 +52,7 @@ int main(void){
 	int *A,*B,*C; //A[filA][colA],B[filB][colB],C[filA][colB]
 	int *d_A,*d_B,*d_C,*h_C;
 	int filA=1024,colA=1024,filB=1024,colB=1024;
-	
+	//int filA=5,colA=10,filB=10,colB=1;
 	//-------------------------------CPU--------------------------------------------------------------------
 	startCPU = clock();	
 
@@ -63,7 +64,7 @@ int main(void){
 	inicializa(B,filB,colB);
 	
 	if(colA==filB){//para que sean multiplicables
-		multiplicaMatrices(A,filA,colA,B,filB,colB,C);
+		//multiplicaMatrices(A,filA,colA,B,filB,colB,C);
 		//imprime(C,filA,colB);
 	}else{
 		cout<<"Error, no se pueden multiplicar"<<endl;
@@ -83,6 +84,9 @@ int main(void){
 	cudaMalloc((void**)&d_B,filB*colB*sizeof(int));
 	cudaMalloc((void**)&d_C,filA*colB*sizeof(int));	
 	
+	cudaMemcpy(d_A,A,filA*colA*sizeof(int),cudaMemcpyHostToDevice);//destino d_A y origen A
+	cudaMemcpy(d_B,B,filB*colB*sizeof(int),cudaMemcpyHostToDevice);	
+
 	//Depende directamente de la dimensión de las matrices
 	dim3 dimblock(32,32,1);
 	dim3 dimGrid(ceil(filA/32),ceil(colB/32),1);
@@ -95,7 +99,7 @@ int main(void){
 	
 	endGPU = clock();
 
-	//imprime(h_C,filA,colB);
+	imprime(h_C,filA,colB);
 	double time_GPU=((double)(endGPU-startGPU))/CLOCKS_PER_SEC;
 	cout<<"El tiempo transcurrido en la GPU fue: "<<time_GPU<<endl;
 	//-----------------------------------------------------------------------------------
