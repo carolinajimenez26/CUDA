@@ -11,7 +11,7 @@ __global__ void MultiplicaMatricesCU(int* A,int* B,int* C,int ancho){
 	int col = blockIdx.x*blockDim.x + threadIdx.x;
 	if((row<ancho)&&(col<ancho)){
 		int suma=0;
-		for(int k=0;k<filB;k++){//Se mueve entre las filas de B 
+		for(int k=0;k<ancho;k++){//Se mueve entre las filas de B 
 			suma=suma+A[(row*ancho)+k]*B[(k*ancho)+col];
 		}
 		C[(row*ancho)+col]=suma;
@@ -63,7 +63,7 @@ int main(void){
 	inicializa(B,filB,colB);
 	
 	if(colA==filB){//para que sean multiplicables
-		//multiplicaMatrices(A,filA,colA,B,filB,colB,C);
+		multiplicaMatrices(A,filA,colA,B,filB,colB,C);
 		//imprime(C,filA,colB);
 	}else{
 		cout<<"Error, no se pueden multiplicar"<<endl;
@@ -95,7 +95,7 @@ int main(void){
 	
 	endGPU = clock();
 
-	imprime(h_C,filA,colB);
+	//imprime(h_C,filA,colB);
 	double time_GPU=((double)(endGPU-startGPU))/CLOCKS_PER_SEC;
 	cout<<"El tiempo transcurrido en la GPU fue: "<<time_GPU<<endl;
 	//-----------------------------------------------------------------------------------
